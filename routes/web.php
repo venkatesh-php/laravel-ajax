@@ -19,5 +19,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('get_state_list/{id}','ListController@getStateList')->name('getStateList');
-Route::post('get_state_list/{id}', 'ListController@getStateList');
 Route::get('/get_city_list/{id}','ListController@getCityList')->name('getCityList');

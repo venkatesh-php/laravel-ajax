@@ -113,11 +113,7 @@
                             <label for="state" class="col-md-4 control-label">State</label>
                             <div class="col-md-6">
                                 <select name="state" id="state" class="form-control">
-                                
-                               {{-- @foreach ($states as $state)
-                                    <option value="{{$state->name}}" disabled="disabled" selected="selected">{{$state->name}}</option>
-                                @endforeach
-                                --}}
+                              
                                 </select>
                             </div>
                         </div>
@@ -126,10 +122,7 @@
                             <label for="city" class="col-md-4 control-label">City</label>
                             <div class="col-md-6">
                                 <select name="city" id="city" class="form-control">
-                                {{-- @foreach ($cities as $city)
-                                    <option value="{{city->name}}" disabled="disabled" selected="selected">{{city->name}}</option>
-                                @endforeach
-                                --}}
+                              
                                 </select>
                             </div>
                         </div>
@@ -165,33 +158,30 @@
 </div>
 
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> -->
 <script type="text/javascript">
 $(function(){
     $('#country').change(function(){
     var countryID = $(this).val(); 
-    console.log(countryID);
+    // console.log(countryID);
+
     if(countryID){
-        var url='/get_state_list';
-        console.log(url); 
         $.ajax({
             
            type:"GET",
-           dataType : 'json',
-           async: false,
            url:"{{url('/get_state_list')}}/"+countryID,   
-           data:JSON.stringify(),
 
-           success:function(data){  
-            console.log(data)   
+           success:function(res){  
+            // console.log(res);
                     
-            if(data){
+            if(res){
                 $("#state").empty();
                 $("#state").append('<option>Select</option>');
-                var x = data["name"];
-                $.each(data,function(id,x){
-                    $("#state").append('<option value="'+id+'">'+x+'</option>');
+                
+                $.each(res,function(key,value){
+                    $("#state").append('<option value="'+value.id+'">'+value.name+'</option>');
+                  
                 });
+                
            
             }else{
                $("#state").empty();
@@ -209,23 +199,21 @@ $(function(){
     $('#state').on('change',function()
     {
         var stateID = $(this).val();    
+        // console.log(stateID);
             if(stateID)
             {
                 $.ajax({
                 type:"GET",
-                dataType : 'json',
-                async: false,
                 url:"{{url('get_city_list')}}/"+stateID,
-                data:JSON.stringify(),
 
                 success:function(data){     
-                    console.log(data)           
+                    // console.log(data)           
                 if(data)
                 {
                 $("#city").empty();
                 $("#city").append('<option>Select</option>');
-                $.each(data,function(id,name){
-                    $("#city").append('<option value="'+id+'">'+name+'</option>');
+                $.each(data,function(key,value){
+                    $("#city").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
            
                 }

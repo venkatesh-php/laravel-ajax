@@ -14,8 +14,8 @@ class ListController extends Controller
         $states = DB::table("states")
                     ->where("country_id",$request->id)
                     ->get();
-
         return $states;
+        
     }
     public function getCityList(Request $request)
     {

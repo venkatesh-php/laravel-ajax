@@ -73,9 +73,17 @@ trait AuthenticatesUsers
      */
     protected function attemptLogin(Request $request)
     {
-        return $this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
-        );
+        // return $this->guard()->attempt(
+        //     $this->credentials($request), $request->filled('remember')
+        // );
+
+        if(is_numeric($request->email)){
+            return $this->guard()->attempt(['phone_number'=>$request->email,'password'=>$request->password], $request->filled('remember'));
+        }
+        elseif (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            return $this->guard()->attempt(['email' => $request->email, 'password'=>$request->password], $request->filled('remember'));
+        }
+        return $this->guard()->attempt(['username' => $request->email, 'password'=>$request->password], $request->filled('remember'));
     }
 
     /**
