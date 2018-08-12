@@ -164,22 +164,33 @@
     </div>
 </div>
 
-<!-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
-// <script type="text/javascript">
-
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> -->
+<script type="text/javascript">
+$(function(){
     $('#country').change(function(){
-    var countryID = $(this).val();    
+    var countryID = $(this).val(); 
+    console.log(countryID);
     if(countryID){
+        var url='/get_state_list';
+        console.log(url); 
         $.ajax({
+            
            type:"GET",
-           url:"{{url('get_state_list')}}?country_id="+countryID,
-           success:function(res){               
-            if(res){
+           dataType : 'json',
+           async: false,
+           url:"{{url('/get_state_list')}}/"+countryID,   
+           data:JSON.stringify(),
+
+           success:function(data){  
+            console.log(data)   
+                    
+            if(data){
                 $("#state").empty();
                 $("#state").append('<option>Select</option>');
-                $.each(res,function(key,value){
-                    $("#state").append('<option value="'+key+'">'+value+'</option>');
+                var x = data["name"];
+                $.each(data,function(id,x){
+                    $("#state").append('<option value="'+id+'">'+x+'</option>');
                 });
            
             }else{
@@ -193,28 +204,6 @@
     }      
    });
 
-//  $(document).ready(function() {
-//     $('select[name="country"]').on('change', function() {
-//         var countryID = $(this).val();
-//             if(countryID) {
-//             $.ajax({
-//                 url:"{{url('get_state_list')}}?country_id="+countryID,
-//                 type: "GET",
-//                 dataType: "json",
-//                 success:function(data) {
-//                 $('select[name="state"]').empty();
-//                 $.each(data, function(key, value) {
-//                     $('select[name="state"]').append('<option value="'+ value +'">'+ value +'</option>');
-//                     });
-//                 }
-//             });
-//             }else{
-//             $('select[name="state"]').empty();
-//               }
-//            });
-//         });
-
-
 
 
     $('#state').on('change',function()
@@ -224,13 +213,19 @@
             {
                 $.ajax({
                 type:"GET",
-                url:"{{url('get_city_list')}}?state_id="+stateID,
-                success:function(res){               
-                if(res)
+                dataType : 'json',
+                async: false,
+                url:"{{url('get_city_list')}}/"+stateID,
+                data:JSON.stringify(),
+
+                success:function(data){     
+                    console.log(data)           
+                if(data)
                 {
                 $("#city").empty();
-                $.each(res,function(key,value){
-                    $("#city").append('<option value="'+key+'">'+value+'</option>');
+                $("#city").append('<option>Select</option>');
+                $.each(data,function(id,name){
+                    $("#city").append('<option value="'+id+'">'+name+'</option>');
                 });
            
                 }
@@ -247,5 +242,6 @@
     }
         
    });
+});
 </script>
 @endsection

@@ -10,17 +10,19 @@ class ListController extends Controller
 {
     public function getStateList(Request $request)
     {
+        // return $request->id;
         $states = DB::table("states")
-                    ->where("country_id",$request->country_id)
-                    ->lists("name","id");
-        return response()->json($states);
+                    ->where("country_id",$request->id)
+                    ->get();
+
+        return $states;
     }
     public function getCityList(Request $request)
     {
         $cities = DB::table("cities")
-                    ->where("state_id",$request->state_id)
-                    ->lists("name","id");
-        return response()->json($cities);
+                    ->where("state_id",$request->id)
+                    ->get();
+        return $cities;
     }
 
 }
